@@ -1,0 +1,24 @@
+FRIENDLY NAME
+sanchezzasd
+SID
+SKfbb899fca2df16ba5b26bb20568a1685
+KEY TYPE
+Standard
+SECRET
+caU9F0YlgXqQ5Tp8x9kzcjxCCkuIj6ZB
+
+
+curl -XPOST 'https://video.twilio.com/v1/Rooms' \
+     -u 'SKfbb899fca2df16ba5b26bb20568a1685:caU9F0YlgXqQ5Tp8x9kzcjxCCkuIj6ZB' \
+     -d 'UniqueName=sanchezzasd'
+
+
+
+FRIENDLY NAME
+main
+SID
+SK995ee18cfe2eae3ff166a336c69915c5
+KEY TYPE
+Main
+SECRET
+c1j2yTvWEryOvF18KztkiTRDitAtxOWo
