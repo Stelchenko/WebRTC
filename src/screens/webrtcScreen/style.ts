@@ -2,8 +2,10 @@ import {StyleSheet} from "react-native";
 
 export const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#f5f5f5',
     flex: 1,
-    backgroundColor: 'white'
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   callContainer: {
     flex: 1,
@@ -105,4 +107,11 @@ export const styles = StyleSheet.create({
     fontSize: 16,
     borderBottomWidth:1
   },
+  navButton: {
+    marginTop: 15
+  },
+  navButtonText: {
+    fontSize: 20,
+    color: '#6646ee'
+  }
 })
