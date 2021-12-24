@@ -1,4 +1,5 @@
 import {StyleSheet} from "react-native";
+import { windowHeight, windowWidth } from '../../utils/dimension';
 
 export const styles = StyleSheet.create({
   container: {
@@ -35,16 +36,12 @@ export const styles = StyleSheet.create({
   },
   localVideoOnButtonEnabled: {
     bottom: ("40%"),
-    width: "35%",
     left: "64%",
-    height: "25%",
     zIndex: 2,
   },
   localVideoOnButtonDisabled: {
-    bottom: ("30%"),
-    width: "35%",
+    bottom: ("40%"),
     left: "64%",
-    height: "25%",
     zIndex: 2,
   },
   remoteGrid: {
@@ -52,8 +49,8 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
   },
   remoteVideo: {
-    width: 300,
-    height: 500,
+    height: windowHeight,
+    width: windowWidth,
     zIndex: 1,
   },
   optionsContainer: {

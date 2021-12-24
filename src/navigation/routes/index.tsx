@@ -6,13 +6,18 @@ import HomeStackScreen from '../homeStackScreen';
 
 import Loading from "../../components/loading";
 import {AuthContext} from "../authProvider";
-import {LayoutAnimation} from "react-native";
-
+import {LayoutAnimation, Platform, UIManager} from "react-native";
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const Routes = () => {
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
+
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);

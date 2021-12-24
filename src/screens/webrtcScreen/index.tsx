@@ -3,21 +3,11 @@ import React, {
   useEffect, useRef, useState
 } from 'react';
 import {
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
+  Platform, Animated, PanResponder,
 } from 'react-native';
-import {
-  TwilioVideoLocalView, // to get local view
-  TwilioVideoParticipantView, //to get participant view
-  TwilioVideo
-} from 'react-native-twilio-video-webrtc';
 import {PERMISSIONS, requestMultiple} from "react-native-permissions";
 import {AuthContext} from "../../navigation/authProvider";
-import FormInput from "../../components/formInput";
-import FormButton from "../../components/formButton";
-import {styles} from "./style";
+import WebrtcScreenView from "./webrtcScreenView";
 
 
 const WebrtcScreen = () => {
@@ -31,6 +21,27 @@ const WebrtcScreen = () => {
   const [roomName, setRoomName] = useState('')
   const twilioRef = useRef(null);
   const {logout} = useContext(AuthContext);
+  const pan = useRef(new Animated.ValueXY()).current;
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        pan.setOffset({
+          x: pan.x._value,
+          y: pan.y._value
+        });
+      },
+      onPanResponderMove: Animated.event(
+        [
+          null,
+          {dx: pan.x, dy: pan.y}
+        ]
+      ),
+      onPanResponderRelease: () => {
+        pan.flattenOffset();
+      }
+    })
+  ).current;
 
   const GetAllPermissions = () => {
     console.log(Platform.OS)
@@ -59,6 +70,7 @@ const WebrtcScreen = () => {
     console.log(status);
   }
   const _onEndButtonPress = () => {
+
     twilioRef.current.disconnect()
   }
   const _onMuteButtonPress = () => {
@@ -75,8 +87,7 @@ const WebrtcScreen = () => {
     setStatus('connected')
     // console.log("over");
   }
-  const _onRoomDidDisconnect = ({roomName, error}) => {
-    console.log("ERROR: ", JSON.stringify(error))
+  const _onRoomDidDisconnect = () => {
     console.log("disconnected")
 
     setStatus('disconnected')
@@ -107,142 +118,28 @@ const WebrtcScreen = () => {
 
 
   return (
-
-    <View style={styles.container}>
-      {
-        status === 'disconnected' &&
-        <>
-            <FormInput
-              onChangeText={(text) => setRoomName(text)}
-              placeholder={'Room Name'}
-              defaultValue={roomName}
-            />
-          <FormInput
-            onChangeText={(text) => setToken(text)}
-            placeholder={'Token'}
-            defaultValue={token}
-          />
-          <FormButton buttonTitle={'Connect'} onPress={_onConnectButtonPress}/>
-          <TouchableOpacity
-            style={styles.navButton}
-            onPress={logout}
-          >
-            <Text style={styles.navButtonText}>Log Out</Text>
-          </TouchableOpacity>
-        </>
-      }
-      {
-        (status === 'connected' || status === 'connecting') &&
-        <View style={styles.callContainer}>
-          {
-            status === 'connected' &&
-            <View style={styles.remoteGrid}>
-              <TouchableOpacity style={styles.remoteVideo} onPress={() => {
-                setIsButtonDisplay(!isButtonDisplay)
-              }}>
-                {
-                  Array.from(videoTracks, ([trackSid, trackIdentifier]) => {
-                    return (
-                      <TwilioVideoParticipantView
-                        style={styles.remoteVideo}
-                        key={trackSid}
-                        trackIdentifier={trackIdentifier}
-                      />
-                    )
-                  })
-                }
-              </TouchableOpacity>
-              <TwilioVideoLocalView
-                enabled={true}
-                style={isButtonDisplay ? styles.localVideoOnButtonEnabled : styles.localVideoOnButtonDisabled}
-              />
-            </View>
-          }
-          <View
-            style={
-              {
-                display: isButtonDisplay ? "flex" : "none",
-                position: "absolute",
-                left: 0,
-                bottom: 0,
-                right: 0,
-                height: 100,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-evenly",
-                // backgroundColor:"blue",
-                // zIndex: 2,
-                zIndex: isButtonDisplay ? 2 : 0,
-              }
-            }>
-            <TouchableOpacity
-              style={
-                {
-                  display: isButtonDisplay ? "flex" : "none",
-                  width: 60,
-                  height: 60,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 100 / 2,
-                  backgroundColor: 'grey',
-                  justifyContent: 'center',
-                  alignItems: "center"
-                }
-              }
-              onPress={_onMuteButtonPress}>
-              <Text>Mute</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                {
-                  display: isButtonDisplay ? "flex" : "none",
-                  width: 60,
-                  height: 60,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 100 / 2,
-                  backgroundColor: 'grey',
-                  justifyContent: 'center',
-                  alignItems: "center"
-                }
-              }
-              onPress={_onEndButtonPress}>
-              <Text style={{fontSize: 12}}>End</Text>
-
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={
-                {
-                  display: isButtonDisplay ? "flex" : "none",
-                  width: 60,
-                  height: 60,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 100 / 2,
-                  backgroundColor: 'grey',
-                  justifyContent: 'center',
-                  alignItems: "center"
-                }
-              }
-              onPress={_onFlipButtonPress}>
-              <Text style={{fontSize: 12}}>Flip</Text>
-
-            </TouchableOpacity>
-          </View>
-
-        </View>
-
-      }
-      <TwilioVideo
-        ref={twilioRef}
-        onRoomDidConnect={_onRoomDidConnect}
-        onRoomDidDisconnect={_onRoomDidDisconnect}
-        onRoomDidFailToConnect={_onRoomDidFailToConnect}
-        onParticipantAddedVideoTrack={_onParticipantAddedVideoTrack}
-        onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}
-      />
-
-    </View>
+    <WebrtcScreenView
+      status={status}
+      setRoomName={setRoomName}
+      roomName={roomName}
+      setToken={setToken}
+      token={token}
+      _onConnectButtonPress={_onConnectButtonPress}
+      logout={logout}
+      setIsButtonDisplay={setIsButtonDisplay}
+      isButtonDisplay={isButtonDisplay}
+      videoTracks={videoTracks}
+      pan={pan}
+      panResponder={panResponder}
+      _onMuteButtonPress={_onMuteButtonPress}
+      _onEndButtonPress={_onEndButtonPress}
+      _onFlipButtonPress={_onFlipButtonPress}
+      twilioRef={twilioRef}
+      _onRoomDidConnect={_onRoomDidConnect}
+      _onRoomDidDisconnect={_onRoomDidDisconnect}
+      _onRoomDidFailToConnect={_onRoomDidFailToConnect}
+      _onParticipantAddedVideoTrack={_onParticipantAddedVideoTrack}
+      _onParticipantRemovedVideoTrack={_onParticipantRemovedVideoTrack}/>
   )
 
 }
