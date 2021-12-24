@@ -5,6 +5,7 @@ import FormInput from '../../components/formInput';
 import {styles} from "./style";
 import {LoginScreenProps} from "./type";
 import {AuthContext} from "../../navigation/authProvider";
+import GoogleSignIn from "../../components/googleButton";
 
 const LoginScreen: FC<LoginScreenProps> = (props) => {
   const {navigation} = props
@@ -33,6 +34,7 @@ const LoginScreen: FC<LoginScreenProps> = (props) => {
         style={styles.navButton}
         onPress={() => navigation.navigate('SignUp')}
       >
+        <GoogleSignIn/>
         <Text style={styles.navButtonText}>New user? Join here</Text>
       </TouchableOpacity>
     </View>

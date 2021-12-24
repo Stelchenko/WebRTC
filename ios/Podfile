@@ -11,6 +11,7 @@ target 'PermissionProject' do
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
   pod 'Permission-Microphone', :path => "#{permissions_path}/Microphone"
   pod 'react-native-twilio-video-webrtc', path: '../node_modules/react-native-twilio-video-webrtc'
+  pod 'GoogleSignIn', '~> 6.0.2'
 
   use_react_native!(
     :path => config[:reactNativePath],
