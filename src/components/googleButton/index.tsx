@@ -16,6 +16,7 @@ async function onGoogleButtonPress() {
 
 const GoogleSignIn = () => {
   return (
+    // @ts-ignore
     <FormButton buttonTitle={'Google Sign-In'} onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}/>
   );
 }

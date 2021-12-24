@@ -16,6 +16,7 @@ export const styles = StyleSheet.create({
   },
   navButtonText: {
     fontSize: 20,
+    textAlign: "center",
     color: '#6646ee'
   }
 })

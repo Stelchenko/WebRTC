@@ -20,14 +20,18 @@ const WebrtcScreen = () => {
   const [token, setToken] = useState('');
   const [roomName, setRoomName] = useState('')
   const twilioRef = useRef(null);
+  //@ts-ignore
   const {logout} = useContext(AuthContext);
   const pan = useRef(new Animated.ValueXY()).current;
   const panResponder = useRef(
     PanResponder.create({
       onMoveShouldSetPanResponder: () => true,
       onPanResponderGrant: () => {
+
         pan.setOffset({
+          //@ts-ignore
           x: pan.x._value,
+          //@ts-ignore
           y: pan.y._value
         });
       },

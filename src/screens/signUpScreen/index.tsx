@@ -10,6 +10,7 @@ const SignUpScreen: FC<SignUpScreenProps> = (props) => {
   const {navigation} = props
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  //@ts-ignore
   const { register } = useContext(AuthContext);
   return (
     <View style={styles.container}>
@@ -28,6 +29,7 @@ const SignUpScreen: FC<SignUpScreenProps> = (props) => {
         onChangeText={userPassword => setPassword(userPassword)}
         secureTextEntry={true}
       />
+      {/*@ts-ignore*/}
       <FormButton buttonTitle='Signup' onPress={() => register(email, password)} />
       <TouchableOpacity
         style={styles.navButton}

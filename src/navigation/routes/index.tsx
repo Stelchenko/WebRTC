@@ -14,12 +14,13 @@ if (Platform.OS === 'android') {
 }
 
 const Routes = () => {
+  // @ts-ignore
   const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [initializing, setInitializing] = useState(true);
 
   // Handle user state changes
-  function onAuthStateChanged(user) {
+  function onAuthStateChanged(user: any) {
     setUser(user);
     if (initializing) setInitializing(false);
     setLoading(false);
